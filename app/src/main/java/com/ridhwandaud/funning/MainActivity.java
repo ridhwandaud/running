@@ -16,8 +16,8 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
 
 //        //Layout
-//        RelativeLayout mainLayout = new RelativeLayout(this);
-//        mainLayout.setBackgroundColor(Color.GREEN);
+        RelativeLayout mainLayout = new RelativeLayout(this);
+        mainLayout.setBackgroundColor(Color.GREEN);
 //
 //        //Button
 //        Button signInButton = new Button(this);
