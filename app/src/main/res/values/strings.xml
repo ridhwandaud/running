@@ -2,4 +2,9 @@
     <string name="app_name">Funning</string>
     <string name="sign_in">Sign In</string>
     <string name="log_in">Log In</string>
+    <string name="change_button">Change</string>
+    <string name="change_text">Large Text</string>
+    <string name="button_text">Click Me</string>
+    <string name="top_text">Top</string>
+    <string name="bottom_text">Bottom</string>
 </resources>

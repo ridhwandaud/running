@@ -7,7 +7,7 @@
     android:paddingLeft="@dimen/activity_horizontal_margin"
     android:paddingRight="@dimen/activity_horizontal_margin"
     android:paddingTop="@dimen/activity_vertical_margin"
-    tools:context="com.ridhwandaud.funning.MainActivity">
+    tools:context="com.ridhwandaud.funning.Running">
 
     <TextView
         android:id="@+id/welcomeText"
@@ -15,27 +15,39 @@
         android:layout_height="wrap_content"
         android:layout_alignParentTop="true"
         android:layout_centerHorizontal="true"
-        android:layout_marginTop="56dp"
-        android:text="Funning"
+        android:layout_marginTop="41dp"
+        android:text="Welcome Ridhwan"
         android:textAppearance="?android:attr/textAppearanceLarge" />
 
-    <EditText
-        android:id="@+id/usernameInput"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_below="@+id/welcomeText"
-        android:layout_centerHorizontal="true"
-        android:layout_marginTop="62dp"
-        android:width="200dp"
-        android:hint="Username"/>
+
 
     <Button
-        android:id="@+id/loginButton"
+        android:id="@+id/startRunningBtn"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignParentBottom="true"
         android:layout_centerHorizontal="true"
-        android:layout_marginBottom="120dp"
-        android:onClick="userLogin"
-        android:text="Login" />
+        android:layout_marginBottom="75dp"
+        android:onClick="startRunning"
+        android:text="Start" />
+
+    <TextView
+        android:id="@+id/runningTextView"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/welcomeText"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="85dp"
+        android:text="0:00"
+        android:textAppearance="?android:attr/textAppearanceLarge" />
+
+    <Button
+        android:id="@+id/stopRunningBtn"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:layout_centerHorizontal="true"
+        android:layout_marginBottom="75dp"
+        android:text="Stop"
+ />
 </RelativeLayout>
