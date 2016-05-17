@@ -25,11 +25,10 @@
         android:id="@+id/startRunningBtn"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_alignParentBottom="true"
-        android:layout_centerHorizontal="true"
-        android:layout_marginBottom="75dp"
         android:onClick="startRunning"
-        android:text="Start" />
+        android:text="Start"
+        android:layout_centerVertical="true"
+        android:layout_centerHorizontal="true" />
 
     <TextView
         android:id="@+id/runningTextView"
@@ -45,9 +44,18 @@
         android:id="@+id/stopRunningBtn"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_alignParentBottom="true"
-        android:layout_centerHorizontal="true"
-        android:layout_marginBottom="75dp"
         android:text="Stop"
- />
+        android:layout_centerVertical="true"
+        android:layout_centerHorizontal="true" />
+
+    <Button
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="LogOut"
+        android:id="@+id/logOut"
+        android:onClick="userLogOut"
+        android:layout_alignParentBottom="true"
+        android:layout_alignRight="@+id/startRunningBtn"
+        android:layout_alignEnd="@+id/startRunningBtn"
+        android:layout_marginBottom="54dp" />
 </RelativeLayout>

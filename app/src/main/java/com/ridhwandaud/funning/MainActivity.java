@@ -10,6 +10,7 @@ import android.view.MotionEvent;
 import android.view.GestureDetector;
 import android.support.v4.view.GestureDetectorCompat;
 
+import com.firebase.client.AuthData;
 import com.firebase.client.DataSnapshot;
 import com.firebase.client.Firebase;
 import com.firebase.client.FirebaseError;
@@ -22,63 +23,144 @@ import java.util.Map;
 
 public class MainActivity extends AppCompatActivity {
 
-    private static final String TAG ="com.ridhwandaud.funning";
+    private static final String TAG ="com.funning";
     private EditText usernameInput;
+    private EditText passwordInput;
+    private Firebase funningRef;
     private Firebase userRef;
+    private Firebase newUserRef;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_main);
         Firebase.setAndroidContext(this);
-        Firebase funningRef = new Firebase("https://funning.firebaseio.com/");
-        funningRef.child("message").setValue("Do you have data? You'll love Firebase.");
+        setContentView(R.layout.activity_main);
+
+
+        funningRef = new Firebase("https://funning.firebaseio.com/");
 
         userRef = funningRef.child("users");
-
-        User alan = new User("Alan Taring", 1912);
-        userRef.setValue(alan);
+        newUserRef = userRef.push();
 
         usernameInput = (EditText)findViewById(R.id.usernameInput);
+        passwordInput = (EditText)findViewById(R.id.userPasswordInput);
 
-
-        funningRef.child("message").addValueEventListener(new ValueEventListener() {
+        funningRef.addAuthStateListener(new Firebase.AuthStateListener() {
             @Override
-            public void onDataChange(DataSnapshot snapshot) {
-                System.out.println(snapshot.getValue());  //prints "Do you have data? You'll love Firebase."
-                Log.i(TAG,snapshot.getValue().toString());
+            public void onAuthStateChanged(AuthData authData) {
+                if (authData != null) {
+                    // user is logged in
+                    Log.i(TAG," user already login");
+                    skipUserLogin();
+                } else {
+                    // user is not logged in
+                    // continue sign in
+                    Log.i(TAG," user need to login first");
+                }
             }
-            @Override public void onCancelled(FirebaseError error) { }
+        });
+    }
+
+    public void createNewUser(View view)
+    {
+        final String email = usernameInput.getText().toString();
+        final String password = passwordInput.getText().toString();
+
+        funningRef.createUser(email, password, new Firebase.ValueResultHandler<Map<String, Object>>() {
+            @Override
+            public void onSuccess(Map<String, Object> result) {
+                System.out.println("Successfully created user account with uid: " + result.get("uid"));
+                Log.i(TAG+"user created",result.get("uid").toString());
+                userLoginAfterRegister(email,password);
+            }
+            @Override
+            public void onError(FirebaseError firebaseError) {
+                // there was an error
+                Log.i(TAG,firebaseError.toString());
+            }
+        });
+
+        Intent i = new Intent(this,Running.class);
+        i.putExtra("username",email);
+
+        Map<String, Object> user = new HashMap<String, Object>();
+        user.put("username", email);
+
+        userRef.setValue(user);
+
+        startActivity(i);
+    }
+
+    public void userLoginAfterRegister(String email,String password)
+    {
+        funningRef.authWithPassword(email, password, new Firebase.AuthResultHandler() {
+            @Override
+            public void onAuthenticated(AuthData authData) {
+                System.out.println("User ID: " + authData.getUid() + ", Provider: " + authData.getProvider());
+                Log.i(TAG+"authData",authData.getUid().toString());
+            }
+            @Override
+            public void onAuthenticationError(FirebaseError firebaseError) {
+                // there was an error
+                Log.i(TAG,"user login error");
+            }
         });
     }
 
     public void userLogin(View view)
     {
-        String username = usernameInput.getText().toString();
+        final String email = usernameInput.getText().toString();
+        final String password = passwordInput.getText().toString();
 
+        funningRef.authWithPassword(email, password, new Firebase.AuthResultHandler() {
+            @Override
+            public void onAuthenticated(AuthData authData) {
+                System.out.println("User ID: " + authData.getUid() + ", Provider: " + authData.getProvider());
+                Log.i(TAG+"authData",authData.getUid().toString());
+            }
+            @Override
+            public void onAuthenticationError(FirebaseError firebaseError) {
+                // there was an error
+                Log.i(TAG,"user login error");
+            }
+        });
+    }
+
+    public void skipUserLogin()
+    {
         Intent i = new Intent(this,Running.class);
-        i.putExtra("username",username);
-
-        Map<String, Object> nickname = new HashMap<String, Object>();
-        nickname.put("fullName", username);
-
-        userRef.updateChildren(nickname);
-
         startActivity(i);
     }
 
     public class User {
-        private int birthYear;
+        private int age;
+        private int height;
+        private int weight;
         private String fullName;
+
         public User() {}
-        public User(String fullName, int birthYear) {
+
+        public User(String fullName, int age,int height ,int weight) {
+
             this.fullName = fullName;
-            this.birthYear = birthYear;
+            this.age = age;
+            this.height = height;
+            this.weight = weight;
         }
-        public long getBirthYear() {
-            return birthYear;
+        public long getAge() {
+            return age;
         }
         public String getFullName() {
             return fullName;
         }
+    }
+
+    public void onBackPressed() {
+        Log.i(TAG, "onBackPressed Called");
+        Intent intent = new Intent(Intent.ACTION_MAIN);
+        intent.addCategory(Intent.CATEGORY_HOME);
+        intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);//***Change Here***
+        startActivity(intent);
+        finish();
+        System.exit(0);
     }
 }

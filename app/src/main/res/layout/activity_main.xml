@@ -27,15 +27,37 @@
         android:layout_centerHorizontal="true"
         android:layout_marginTop="62dp"
         android:width="200dp"
-        android:hint="Username"/>
+        android:hint="Email"
+        android:inputType="textEmailAddress" />
 
     <Button
-        android:id="@+id/loginButton"
+        android:id="@+id/createNewUser"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_marginBottom="35dp"
+        android:onClick="createNewUser"
+        android:text="Sign Up"
         android:layout_alignParentBottom="true"
+        android:layout_alignRight="@+id/welcomeText"
+        android:layout_alignEnd="@+id/welcomeText" />
+
+    <EditText
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:inputType="numberPassword"
+        android:ems="10"
+        android:id="@+id/userPasswordInput"
+        android:layout_centerVertical="true"
+        android:layout_centerHorizontal="true" />
+
+    <Button
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Login In"
+        android:id="@+id/userLoginButton"
+        android:layout_below="@+id/userPasswordInput"
         android:layout_centerHorizontal="true"
-        android:layout_marginBottom="120dp"
-        android:onClick="userLogin"
-        android:text="Login" />
+        android:layout_marginTop="42dp"
+        android:onClick="userLogin" />
+
 </RelativeLayout>
