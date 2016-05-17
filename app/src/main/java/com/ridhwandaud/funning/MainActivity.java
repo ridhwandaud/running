@@ -17,27 +17,35 @@ import com.firebase.client.ValueEventListener;
 
 import android.util.Log;
 
+import java.util.HashMap;
+import java.util.Map;
+
 public class MainActivity extends AppCompatActivity {
 
     private static final String TAG ="com.ridhwandaud.funning";
     private EditText usernameInput;
+    private Firebase userRef;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         Firebase.setAndroidContext(this);
-        Firebase myFirebaseRef = new Firebase("https://funning.firebaseio.com/");
-        myFirebaseRef.child("message").setValue("Do you have data? You'll love Firebase.");
+        Firebase funningRef = new Firebase("https://funning.firebaseio.com/");
+        funningRef.child("message").setValue("Do you have data? You'll love Firebase.");
+
+        userRef = funningRef.child("users");
+
+        User alan = new User("Alan Taring", 1912);
+        userRef.setValue(alan);
 
         usernameInput = (EditText)findViewById(R.id.usernameInput);
 
 
-        myFirebaseRef.child("message").addValueEventListener(new ValueEventListener() {
+        funningRef.child("message").addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot snapshot) {
                 System.out.println(snapshot.getValue());  //prints "Do you have data? You'll love Firebase."
                 Log.i(TAG,snapshot.getValue().toString());
-                usernameInput.setText(snapshot.getValue().toString());
             }
             @Override public void onCancelled(FirebaseError error) { }
         });
@@ -49,6 +57,28 @@ public class MainActivity extends AppCompatActivity {
 
         Intent i = new Intent(this,Running.class);
         i.putExtra("username",username);
+
+        Map<String, Object> nickname = new HashMap<String, Object>();
+        nickname.put("fullName", username);
+
+        userRef.updateChildren(nickname);
+
         startActivity(i);
+    }
+
+    public class User {
+        private int birthYear;
+        private String fullName;
+        public User() {}
+        public User(String fullName, int birthYear) {
+            this.fullName = fullName;
+            this.birthYear = birthYear;
+        }
+        public long getBirthYear() {
+            return birthYear;
+        }
+        public String getFullName() {
+            return fullName;
+        }
     }
 }
